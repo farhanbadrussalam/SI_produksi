@@ -21,6 +21,7 @@ class CreateProduksisTable extends Migration
             $table->string('warna');
             $table->string('quantity_awal');
             $table->string('quantity_jadi');
+            $table->enum('jenis_proses', ['Bagus', 'Jelek']);
             $table->string('waktu_mulai');
             $table->string('waktu_selesai');
             $table->text('keterangan');
