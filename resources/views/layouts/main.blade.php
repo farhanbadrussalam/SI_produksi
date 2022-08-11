@@ -54,6 +54,7 @@
                     <span>Dashboard</span></a>
             </li>
 
+            @if(Auth::user()->level == 1 || Auth::user()->level == 2)
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -61,21 +62,27 @@
             <div class="sidebar-heading">
                 Master
             </div>
+            @endif
 
+            @if(Auth::user()->level == 1)
             <!-- Nav Item - Charts -->
             <li class="nav-item {{ Request::is('users*') ? 'active' : '' }}">
                 <a class="nav-link py-1" href="{{ url('users') }}">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Users</span></a>
             </li>
+            @endif
 
+            @if(Auth::user()->level == 1 || Auth::user()->level == 2)
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item {{ Request::is('mesin*') ? 'active' : '' }}">
                 <a class="nav-link py-1" href="{{ url('mesin') }}">
                     <i class="fas fa-fw fa-clipboard"></i>
                     <span>Data Mesin</span></a>
             </li>
+            @endif
 
+            @if(Auth::user()->level == 3 || Auth::user()->level == 4)
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -83,23 +90,41 @@
             <div class="sidebar-heading">
                 Produksi
             </div>
+            @endif
 
+            @if(Auth::user()->level == 3 || Auth::user()->level == 4)
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item {{ Request::is('jadwal*') ? 'active' : '' }}">
                 <a class="nav-link py-1" href="{{ url('jadwal') }}">
                     <i class="fas fa-fw fa-business-time"></i>
                     <span>Jadwal produksi</span></a>
             </li>
+            @endif
 
+            @if(Auth::user()->level == 3)
             <!-- Nav Item - Charts -->
             <li class="nav-item {{ Request::is('produksi*') ? 'active' : '' }}">
                 <a class="nav-link py-1" href="{{ url('produksi') }}">
                     <i class="fas fa-fw fa-archive"></i>
                     <span>Data Produksi</span></a>
             </li>
+            @endif
 
+            @if(Auth::user()->level == 1 || Auth::user()->level == 2)
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Laporan
+            </div>
+
+            <li class="nav-item {{ Request::is('lap_produksi*') ? 'active' : '' }}">
+                <a class="nav-link py-1" href="{{ url('lap_produksi') }}">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Laporan Produksi</span></a>
+            </li>
+            @endif
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
@@ -125,14 +150,15 @@
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Mochamad Ulin Nuha</span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ auth()->user()->name }}</span>
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Logout
-                            </a>
+                            <form action="/logout" method="POST">
+                                @csrf
+                                <button type="submit" class=" dropdown-item bg-light border-0"><i class="fa fa-power-off"></i> Logout</a>
+                                </button>
+                            </form>
                         </div>
                     </li>
 

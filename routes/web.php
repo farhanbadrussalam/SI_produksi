@@ -18,19 +18,40 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/dashboard', function () {
     return view('dashboard');
 });
-Route::get('/login', [LoginController::class, 'index']);
+Route::get('/', [LoginController::class, 'index']);
+Route::post('/', [LoginController::class, 'authenticate'])->middleware('guest');
+Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth');
 
-Route::get('/users', [UsersController::class, 'index']);
-Route::get('/users/dataAjax', [UsersController::class, 'dataAjax']);
+Route::group(['middleware' => ['auth', 'level:1,2']], function () {
+    // User
+    Route::get('/users', [UsersController::class, 'index']);
+    Route::get('/users/dataAjax', [UsersController::class, 'dataAjax']);
+    Route::post('/users/store', [UsersController::class, 'store']);
+    Route::post('/users/{id}/update', [UsersController::class, 'update']);
+    Route::get('/users/{id}/destroy', [UsersController::class, 'destroy']);
 
-Route::get('/mesin', [MesinController::class, 'index']);
-Route::get('/mesin/dataAjax', [MesinController::class, 'dataAjax']);
+    // Mesin
+    Route::get('/mesin', [MesinController::class, 'index']);
+    Route::get('/mesin/dataAjax', [MesinController::class, 'dataAjax']);
 
-Route::get('/jadwal', [JadwalController::class, 'index']);
-Route::get('/jadwal/dataAjax', [JadwalController::class, 'dataAjax']);
+    // Laporan Produksi
 
-Route::get('/produksi', [ProduksiController::class, 'index']);
-Route::get('/produksi/dataAjax', [ProduksiController::class, 'dataAjax']);
+});
+
+
+Route::group(['middleware' => ['auth', 'level:3,4']], function () {
+    // Jadwal Produksi
+    Route::get('/jadwal', [JadwalController::class, 'index']);
+    Route::get('/jadwal/dataAjax', [JadwalController::class, 'dataAjax']);
+
+    // Data Produksi
+    Route::get('/produksi', [ProduksiController::class, 'index']);
+    Route::get('/produksi/dataAjax', [ProduksiController::class, 'dataAjax']);
+});
+
+
+
+
