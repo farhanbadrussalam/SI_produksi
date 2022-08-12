@@ -120,7 +120,8 @@ class ProduksiController extends Controller
             'quantity_awal' => 'required',
             'quantity_jadi' => 'required',
             'waktu_mulai' => 'required',
-            'waktu_selesai' => 'required'
+            'waktu_selesai' => 'required',
+            'keterangan' => 'required'
         ]);
 
         $date = now();

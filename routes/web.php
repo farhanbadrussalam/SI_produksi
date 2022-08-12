@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\KainController;
 use App\Http\Controllers\LaporanController;
@@ -20,10 +21,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
-Route::get('/', [LoginController::class, 'index']);
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
+Route::get('/', [LoginController::class, 'index'])->middleware('guest');
 Route::post('/', [LoginController::class, 'authenticate'])->middleware('guest');
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth');
 
@@ -38,14 +37,15 @@ Route::group(['middleware' => ['auth', 'level:1,2']], function () {
     // Route::get('/users/{id}/destroy', [UsersController::class, 'destroy']);
 
     // Mesin
-    Route::get('/mesin', [MesinController::class, 'index']);
     Route::get('/mesin/dataAjax', [MesinController::class, 'dataAjax']);
+    Route::resource('/mesin', MesinController::class);
 
     Route::get('/kain/dataAjax', [KainController::class, 'dataAjax']);
     Route::resource('/kain', KainController::class);
 
     // Laporan Produksi
     Route::get('/laporan', [LaporanController::class, 'index']);
+    Route::get('/laporan/cetak', [LaporanController::class, 'cetak']);
 });
 
 
