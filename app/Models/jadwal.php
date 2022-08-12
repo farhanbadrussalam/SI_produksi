@@ -10,6 +10,7 @@ class jadwal extends Model
     use HasFactory;
     protected $table = 'tbl_jadwal';
     protected $with = ['mesin', 'user'];
+    protected $guarded = ['id'];
 
     public function mesin()
     {

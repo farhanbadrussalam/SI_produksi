@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\KainController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MesinController;
 use App\Http\Controllers\ProduksiController;
@@ -37,21 +39,20 @@ Route::group(['middleware' => ['auth', 'level:1,2']], function () {
     Route::get('/mesin', [MesinController::class, 'index']);
     Route::get('/mesin/dataAjax', [MesinController::class, 'dataAjax']);
 
-    // Laporan Produksi
+    Route::get('/kain/dataAjax', [KainController::class, 'dataAjax']);
+    Route::resource('/kain', KainController::class);
 
+    // Laporan Produksi
+    Route::get('/laporan', [LaporanController::class, 'index']);
 });
 
 
 Route::group(['middleware' => ['auth', 'level:3,4']], function () {
     // Jadwal Produksi
-    Route::get('/jadwal', [JadwalController::class, 'index']);
     Route::get('/jadwal/dataAjax', [JadwalController::class, 'dataAjax']);
+    Route::resource('/jadwal', JadwalController::class);
 
     // Data Produksi
-    Route::get('/produksi', [ProduksiController::class, 'index']);
     Route::get('/produksi/dataAjax', [ProduksiController::class, 'dataAjax']);
+    Route::resource('/produksi', ProduksiController::class);
 });
-
-
-
-

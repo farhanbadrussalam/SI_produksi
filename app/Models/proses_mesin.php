@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class proses_mesin extends Model
 {
+    protected $table = 'proses_mesin';
     use HasFactory;
 }

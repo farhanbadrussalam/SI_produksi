@@ -17,7 +17,7 @@ class CreateProduksisTable extends Migration
             $table->id();
             $table->foreignId('jadwal_id');
             $table->foreignId('proses_id');
-            $table->string('jenis_kain');
+            $table->foreignId('kain_id');
             $table->string('warna');
             $table->string('quantity_awal');
             $table->string('quantity_jadi');

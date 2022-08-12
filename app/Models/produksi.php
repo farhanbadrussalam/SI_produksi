@@ -9,4 +9,16 @@ class produksi extends Model
 {
     use HasFactory;
     protected $table = 'tbl_produksi';
+    protected $guarded = ['id'];
+    protected $with = ['kain', 'jadwal'];
+
+    public function kain()
+    {
+        return $this->belongsTo(kain::class);
+    }
+
+    public function jadwal()
+    {
+        return $this->belongsTo(jadwal::class);
+    }
 }

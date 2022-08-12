@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\jadwal;
 use App\Http\Requests\StorejadwalRequest;
 use App\Http\Requests\UpdatejadwalRequest;
-
+use App\Models\mesin;
+use App\Models\proses_mesin;
+use App\Models\User;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
 
+date_default_timezone_set('Asia/Jakarta');
 class JadwalController extends Controller
 {
     /**
@@ -17,13 +21,30 @@ class JadwalController extends Controller
      */
     public function index()
     {
-        $jadwal = jadwal::all();
-        return view('jadwal.index');
+        $date = now()->format('Y-m-d');
+
+        if (Auth::user()->level == 3) {
+            $getjadwal = jadwal::where('user_id', Auth::user()->id)->where('tanggal', $date)->first();
+            if ($getjadwal) {
+                return redirect()->to('jadwal/' . $getjadwal->id);
+            } else {
+                return view('jadwal.index', [
+                    'jadwalKosong' => true
+                ]);
+            }
+        } else {
+            return view('jadwal.index');
+        }
     }
 
     public function dataAjax()
     {
-        $jadwal = jadwal::all();
+        $date = now()->format('Y-m-d');
+        if (Auth::user()->level == 3) {
+            $jadwal = jadwal::where('user_id', Auth::user()->id)->where('tanggal', $date)->get();
+        } else if (Auth::user()->level == 4) {
+            $jadwal = jadwal::where('tanggal', '>=', $date)->get();
+        }
 
         return DataTables::of($jadwal)
             ->addIndexColumn()
@@ -39,10 +60,10 @@ class JadwalController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                     <div class="d-flex justify-content-center w-100">
-                        <a href="' . url("dashboard/product/$row->id") . '" class="btn btn-info mr-2">
+                        <a href="' . url("jadwal/$row->id") . '" class="btn btn-info mr-2">
                             <i class="fas fa-info-circle" aria-hidden="true"></i>
                         </a>
-                        <a href="' . url("dashboard/product/$row->id/edit") . '" class="btn btn-warning mr-2">
+                        <a href="' . url("jadwal/$row->id/edit") . '" class="btn btn-warning mr-2">
                             <i class="fas fa-edit" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0)" onclick="deleteThis(' . $row->id . ')" class="btn btn-danger">
@@ -61,7 +82,11 @@ class JadwalController extends Controller
      */
     public function create()
     {
-        //
+        return view('jadwal.create', [
+            'dataOperator' => User::where('level', 3)->get(),
+            'dataMesin' => mesin::all(),
+            'dataProses' => proses_mesin::all()
+        ]);
     }
 
     /**
@@ -72,7 +97,27 @@ class JadwalController extends Controller
      */
     public function store(StorejadwalRequest $request)
     {
-        //
+        $validateData = $request->validate([
+            'operator' => 'required',
+            'mesin' => 'required',
+            'proses_mesin' => 'required',
+            'mulai' => 'required',
+            'selesai' => 'required',
+            'tanggal' => 'required'
+        ]);
+
+        $data = [
+            'user_id' => $validateData['operator'],
+            'mesin_id' => $validateData['mesin'],
+            'mulai' => $validateData['mulai'],
+            'proses' => json_encode($validateData['proses_mesin']),
+            'selesai' => $validateData['selesai'],
+            'tanggal' => $validateData['tanggal']
+        ];
+
+        jadwal::create($data);
+
+        return redirect('/jadwal')->with('success', 'Create new jadwal success');
     }
 
     /**
@@ -83,7 +128,10 @@ class JadwalController extends Controller
      */
     public function show(jadwal $jadwal)
     {
-        //
+        return view('jadwal.detail', [
+            'jadwal' => $jadwal,
+            'dataProses' => proses_mesin::whereIn('id', json_decode($jadwal->proses))->get()
+        ]);
     }
 
     /**
@@ -94,7 +142,12 @@ class JadwalController extends Controller
      */
     public function edit(jadwal $jadwal)
     {
-        //
+        return view('jadwal.edit', [
+            'dataOperator' => User::where('level', 3)->get(),
+            'dataMesin' => mesin::all(),
+            'dataProses' => proses_mesin::all(),
+            'jadwal' => $jadwal
+        ]);
     }
 
     /**
@@ -106,7 +159,24 @@ class JadwalController extends Controller
      */
     public function update(UpdatejadwalRequest $request, jadwal $jadwal)
     {
-        //
+        $validateData = $request->validate([
+            'operator' => 'required',
+            'mesin' => 'required',
+            'proses_mesin' => 'required',
+            'mulai' => 'required',
+            'selesai' => 'required',
+        ]);
+
+        $data = [
+            'user_id' => $validateData['operator'],
+            'mesin_id' => $validateData['mesin'],
+            'mulai' => $validateData['mulai'],
+            'proses' => json_encode($validateData['proses_mesin']),
+            'selesai' => $validateData['selesai']
+        ];
+
+        jadwal::where('id', $jadwal->id)->update($data);
+        return redirect('/jadwal')->with('success', 'Update jadwal success');
     }
 
     /**
@@ -117,6 +187,7 @@ class JadwalController extends Controller
      */
     public function destroy(jadwal $jadwal)
     {
-        //
+        jadwal::destroy($jadwal->id);
+        return 'Jadwal has been deleted';
     }
 }
