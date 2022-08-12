@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\kain;
 use App\Http\Requests\StorekainRequest;
 use App\Http\Requests\UpdatekainRequest;
-
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class KainController extends Controller
 {

@@ -29,11 +29,13 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth');
 
 Route::group(['middleware' => ['auth', 'level:1,2']], function () {
     // User
-    Route::get('/users', [UsersController::class, 'index']);
     Route::get('/users/dataAjax', [UsersController::class, 'dataAjax']);
-    Route::post('/users/store', [UsersController::class, 'store']);
-    Route::post('/users/{id}/update', [UsersController::class, 'update']);
-    Route::get('/users/{id}/destroy', [UsersController::class, 'destroy']);
+    Route::resource('/users', UsersController::class);
+
+    // Route::get('/users', [UsersController::class, 'index']);
+    // Route::post('/users/store', [UsersController::class, 'store']);
+    // Route::post('/users/{id}/update', [UsersController::class, 'update']);
+    // Route::get('/users/{id}/destroy', [UsersController::class, 'destroy']);
 
     // Mesin
     Route::get('/mesin', [MesinController::class, 'index']);
