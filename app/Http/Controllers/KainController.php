@@ -27,19 +27,16 @@ class KainController extends Controller
         return DataTables::of($kain)
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                return '
-                    <div class="d-flex justify-content-center w-100">
-                        <a href="' . url("kain/$row->id") . '" class="btn btn-info mr-2">
-                            <i class="fas fa-info-circle" aria-hidden="true"></i>
+                return "
+                    <div class='d-flex justify-content-center w-100'>
+                        <a href='javascript:void(0)' onclick='editData(this)' data-item='$row' class='btn btn-warning mr-2'>
+                            <i class='fas fa-edit' aria-hidden='true'></i>
                         </a>
-                        <a href="' . url("kain/$row->id/edit") . '" class="btn btn-warning mr-2">
-                            <i class="fas fa-edit" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0)" onclick="deleteThis(' . $row->id . ')" class="btn btn-danger">
-                            <i class="fas fa-trash" aria-hidden="true"></i>
+                        <a href='javascript:void(0)' onclick='deleteThis($row->id)' class='btn btn-danger'>
+                            <i class='fas fa-trash' aria-hidden='true'></i>
                         </a>
                     </div>
-                ';
+                ";
             })
             ->make(true);
     }
@@ -62,7 +59,10 @@ class KainController extends Controller
      */
     public function store(StorekainRequest $request)
     {
-        //
+        kain::create([
+            'nama_kain' => $request->nama_kain
+        ]);
+        return redirect('/kain')->with('success', 'Create new kain success');
     }
 
     /**
@@ -96,7 +96,11 @@ class KainController extends Controller
      */
     public function update(UpdatekainRequest $request, kain $kain)
     {
-        //
+        kain::where('id', $kain->id)->update([
+            'nama_kain' => $request->nama_kain
+        ]);
+
+        return redirect('/kain')->with('success', 'Update kain success');
     }
 
     /**
@@ -107,6 +111,7 @@ class KainController extends Controller
      */
     public function destroy(kain $kain)
     {
-        //
+        kain::destroy($kain->id);
+        return 'Kain has been deleted';
     }
 }

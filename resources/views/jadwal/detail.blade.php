@@ -12,7 +12,6 @@
             <div>Nama operator : {{ $jadwal->user->name }}</div>
             <div>Nama Mesin : {{ $jadwal->mesin->nama_mesin }}</div>
             <div>Jam kerja : {{ $jadwal->mulai }} s/d {{ $jadwal->selesai }}</div>
-
         </div>
         <br>
         <div class="text-center w-100">
