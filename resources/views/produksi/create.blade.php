@@ -124,7 +124,12 @@
             <div class="form-row mb-2">
                 <div class="col-md-12">
                     <label for="keterangan">Keterangan</label>
-                    <textarea name="keterangan" id="keterangan" cols="30" rows="3" class="form-control">{{ old('keterangan') }}</textarea>
+                    <textarea name="keterangan" id="keterangan" cols="30" rows="3" class="form-control @error('keterangan') is-invalid @enderror">{{ old('keterangan') }}</textarea>
+                    @error('keterangan')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
                 </div>
             </div>
             <div class="form-group">
