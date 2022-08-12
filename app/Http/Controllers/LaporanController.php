@@ -30,14 +30,16 @@ class LaporanController extends Controller
             $jelek = 0;
             $quantityAwal = 0;
             $quantityJadi = 0;
-            foreach ($produksi as $key1 => $value_1) {
-                if ($value_1->jenis_proses == 'Bagus') {
-                    $bagus = $bagus + $value_1->quantity_jadi;
-                } else {
-                    $jelek = $jelek + $value_1->quantity_jadi;
+            if ($produksi) {
+                foreach ($produksi as $key1 => $value_1) {
+                    if ($value_1->jenis_proses == 'Bagus') {
+                        $bagus = $bagus + $value_1->quantity_jadi;
+                    } else {
+                        $jelek = $jelek + $value_1->quantity_jadi;
+                    }
+                    $quantityAwal = $quantityAwal + $value_1->quantity_awal;
+                    $quantityJadi = $quantityJadi + $value_1->quantity_jadi;
                 }
-                $quantityAwal = $quantityAwal + $value_1->quantity_awal;
-                $quantityJadi = $quantityJadi + $value_1->quantity_jadi;
             }
             $value->bagus = $bagus;
             $value->jelek = $jelek;
