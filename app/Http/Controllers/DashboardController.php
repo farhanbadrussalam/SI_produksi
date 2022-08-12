@@ -41,15 +41,17 @@ class DashboardController extends Controller
             $dataOperator = User::where('level', 3)->get();
             foreach ($dataOperator as $key => $value) {
                 $jadwal = jadwal::where('user_id', $value->id)->where('tanggal', $date)->first();
-                $produksi = produksi::where('jadwal_id', $jadwal->id)->get();
-
                 $bagus = 0;
                 $jelek = 0;
-                foreach ($produksi as $key1 => $value_1) {
-                    if ($value_1->jenis_proses == 'Bagus') {
-                        $bagus = $bagus + $value_1->quantity_jadi;
-                    } else {
-                        $jelek = $jelek + $value_1->quantity_jadi;
+                if ($jadwal) {
+                    $produksi = produksi::where('jadwal_id', $jadwal->id)->get();
+
+                    foreach ($produksi as $key1 => $value_1) {
+                        if ($value_1->jenis_proses == 'Bagus') {
+                            $bagus = $bagus + $value_1->quantity_jadi;
+                        } else {
+                            $jelek = $jelek + $value_1->quantity_jadi;
+                        }
                     }
                 }
                 $value->bagus = $bagus;
