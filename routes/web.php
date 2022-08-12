@@ -35,8 +35,8 @@ Route::group(['middleware' => ['auth', 'level:1,2']], function () {
     Route::get('/users/{id}/destroy', [UsersController::class, 'destroy']);
 
     // Mesin
-    Route::get('/mesin', [MesinController::class, 'index']);
     Route::get('/mesin/dataAjax', [MesinController::class, 'dataAjax']);
+    Route::resource('/mesin', MesinController::class);
 
     Route::get('/kain/dataAjax', [KainController::class, 'dataAjax']);
     Route::resource('/kain', KainController::class);

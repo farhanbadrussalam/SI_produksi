@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class mesin extends Model
 {
-    protected $table = 'master_mesin';
     use HasFactory;
+    protected $table = 'master_mesin';
+    protected $guarded = ['id'];
+    protected $with = ['proses_mesin'];
+
+    public function proses_mesin()
+    {
+        return $this->hasMany(proses_mesin::class);
+    }
 }
