@@ -17,6 +17,7 @@ class CreateJadwalsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('mesin_id');
+            $table->date('tanggal');
             $table->time('mulai');
             $table->time('selesai');
             $table->json('proses');

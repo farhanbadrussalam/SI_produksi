@@ -38,7 +38,7 @@
         <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color: #4680c3;">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center mb-2" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center mb-2" href="{{ url('/dashboard') }}">
                 <div class="sidebar-brand-icon">
                     <img src="{{asset('image/logo.png')}}" alt="logo" class="img-fluid rounded-circle shadow">
                 </div>
