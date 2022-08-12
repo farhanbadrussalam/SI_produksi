@@ -24,21 +24,23 @@ class LaporanController extends Controller
         $dataOperator = User::where('level', 3)->get();
         foreach ($dataOperator as $key => $value) {
             $jadwal = jadwal::where('user_id', $value->id)->where('tanggal', $date)->first();
-            $produksi = produksi::where('jadwal_id', $jadwal->id)->get();
-
             $bagus = 0;
             $jelek = 0;
             $quantityAwal = 0;
             $quantityJadi = 0;
-            if ($produksi) {
-                foreach ($produksi as $key1 => $value_1) {
-                    if ($value_1->jenis_proses == 'Bagus') {
-                        $bagus = $bagus + $value_1->quantity_jadi;
-                    } else {
-                        $jelek = $jelek + $value_1->quantity_jadi;
+            if ($jadwal) {
+                $produksi = produksi::where('jadwal_id', $jadwal->id)->get();
+
+                if ($produksi) {
+                    foreach ($produksi as $key1 => $value_1) {
+                        if ($value_1->jenis_proses == 'Bagus') {
+                            $bagus = $bagus + $value_1->quantity_jadi;
+                        } else {
+                            $jelek = $jelek + $value_1->quantity_jadi;
+                        }
+                        $quantityAwal = $quantityAwal + $value_1->quantity_awal;
+                        $quantityJadi = $quantityJadi + $value_1->quantity_jadi;
                     }
-                    $quantityAwal = $quantityAwal + $value_1->quantity_awal;
-                    $quantityJadi = $quantityJadi + $value_1->quantity_jadi;
                 }
             }
             $value->bagus = $bagus;
