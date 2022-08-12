@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth', 'level:1,2']], function () {
 
     // Laporan Produksi
     Route::get('/laporan', [LaporanController::class, 'index']);
+    Route::get('/laporan/cetak', [LaporanController::class, 'cetak']);
 });
 
 
